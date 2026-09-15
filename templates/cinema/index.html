@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ language }}">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн-кинотеатр</title>
+    <link rel="stylesheet" href="{% static 'cinema/css/style.css' %}">
+</head>
+<body class="theme-{{ theme }}">
+
+<header>
+    <h1>🎬 Онлайн-кинотеатр</h1>
+    <p>Выбери жанр — получи подборку фильмов</p>
+</header>
+
+<main>
+    <section class="preferences">
+        <h2>Настройки</h2>
+        <form method="post" action="{% url 'cinema:set_preferences' %}">
+            {% csrf_token %}
+
+            <label>Жанр:
+                <select name="genre">
+                    <option value="">— Выберите —</option>
+                    {% for key, g in genres.items %}
+                        <option value="{{ key }}"
+                            {% if key == current_genre %}selected{% endif %}>
+                            {{ g.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>Тема:
+                <select name="theme">
+                    <option value="light" {% if theme == "light" %}selected{% endif %}>Светлая</option>
+                    <option value="dark"  {% if theme == "dark"  %}selected{% endif %}>Тёмная</option>
+                </select>
+            </label>
+
+            <label>Язык:
+                <select name="language">
+                    <option value="ru" {% if language == "ru" %}selected{% endif %}>Русский</option>
+                    <option value="en" {% if language == "en" %}selected{% endif %}>English</option>
+                </select>
+            </label>
+
+            <button type="submit">Сохранить</button>
+            <a class="btn-clear" href="{% url 'cinema:clear_preferences' %}">Сбросить</a>
+        </form>
+    </section>
+
+    {% if selected_genre_data %}
+        <section class="genre-info">
+            <h2>{{ selected_genre_data.name }}</h2>
+            <p>{{ selected_genre_data.description }}</p>
+
+            <h3>Фильмы:</h3>
+            <ul class="movies">
+                {% for m in movies %}
+                    <li>
+                        <strong>{{ m.title }}</strong>
+                        ({{ m.year }}) — ★ {{ m.rating }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% else %}
+        <p class="hint">Жанр пока не выбран. Выбери его в форме выше.</p>
+    {% endif %}
+
+    {% if recent_genres %}
+        <section class="recent">
+            <h3>Последние посещённые жанры:</h3>
+            <ul>
+                {% for g in recent_genres %}
+                    <li>{{ g }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+</main>
+
+<footer>
+    <p>&copy; 2025 Онлайн-кинотеатр. Лабораторная работа.</p>
+</footer>
+
+</body>
+</html>
