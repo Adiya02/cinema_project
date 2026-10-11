@@ -22,7 +22,7 @@
 ## Установка и запуск
 
 ```bash
-git clone <ссылка на репозиторий>
+git clone https://github.com/Adiya02/cinema_project.git
 cd cinema_project
 
 python -m venv venv
