@@ -53,6 +53,8 @@
     {% if selected_genre_data %}
         <section class="genre-info">
             <h2>{{ selected_genre_data.name }}</h2>
+            <img src="{% static selected_genre_data.image %}"
+                 alt="{{ selected_genre_data.name }}" width="200">
             <p>{{ selected_genre_data.description }}</p>
 
             <h3>Фильмы:</h3>
